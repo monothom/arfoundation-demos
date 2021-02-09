@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+
 public class DistanceManager : MonoBehaviour
 {
     [SerializeField]
@@ -51,7 +52,7 @@ public class DistanceManager : MonoBehaviour
         {
             m_Distance = Vector3.Distance(m_OneObject.transform.position, m_TwoObject.transform.position);
 
-            if (m_Distance <= k_SumDistance)
+            if (true)
             {
                 if (!m_SumActive)
                 {
@@ -60,6 +61,18 @@ public class DistanceManager : MonoBehaviour
                 }
                 
                 m_SpawnedSumPrefab.transform.position = (m_OneObject.transform.position + m_TwoObject.transform.position) / 2;
+				
+								// set the color of the line
+				LineRenderer.startColor = Color.red;
+				LineRenderer.endColor = Color.red;
+		 
+				// set width of the renderer
+				LineRenderer.startWidth = 0.3f;
+				LineRenderer.endWidth = 0.3f;
+		 
+				// set the position
+				LineRenderer.SetPosition(0, m_OneObject.transform.position);
+				LineRenderer.SetPosition(1, m_TwoObject.transform.position);
             }
             else
             {
