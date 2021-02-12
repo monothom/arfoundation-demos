@@ -7,6 +7,7 @@ public class DistanceManager : MonoBehaviour
     ImageTrackingObjectManager m_ImageTrackingObjectManager;
 	public LineRenderer LineRendererOne;
     public LineRenderer LineRendererTwo;
+    public LineRenderer LineRendererThree;
 
     /// <summary>
     /// Get the <c>ImageTrackingObjectManger</c>
@@ -50,7 +51,7 @@ public class DistanceManager : MonoBehaviour
         // set the color of the line
         LineRendererOne.startColor = Color.red;
         LineRendererOne.endColor = Color.red;
-        LineRendererOne.positionCount = 3;
+        LineRendererOne.positionCount = 2;
 
         // set width of the renderer
         LineRendererOne.startWidth = 0.002f;
@@ -59,7 +60,7 @@ public class DistanceManager : MonoBehaviour
         // set the position
         LineRendererOne.SetPosition(0, m_OneObject.transform.position);
         LineRendererOne.SetPosition(1, m_TwoObject.transform.position);
-        LineRendererOne.SetPosition(2, m_ThreeObject.transform.position);
+        // LineRendererOne.SetPosition(2, m_ThreeObject.transform.position);
     }
 
     void MakeLineTwo()
@@ -67,21 +68,38 @@ public class DistanceManager : MonoBehaviour
         // set the color of the line
         LineRendererTwo.startColor = Color.blue;
         LineRendererTwo.endColor = Color.blue;
+        LineRendererTwo.positionCount = 2;
 
         // set width of the renderer
         LineRendererTwo.startWidth = 0.002f;
         LineRendererTwo.endWidth = 0.002f;
 
         // set the position
-        LineRendererTwo.SetPosition(0, m_OneObject.transform.position);
+        LineRendererTwo.SetPosition(0, m_TwoObject.transform.position);
         LineRendererTwo.SetPosition(1, m_ThreeObject.transform.position);
     }
+
+    void MakeLineThree()
+        {
+            // set the color of the line
+            LineRendererThree.startColor = Color.green;
+            LineRendererThree.endColor = Color.green;
+            LineRendererThree.positionCount = 2;
+
+            // set width of the renderer
+            LineRendererThree.startWidth = 0.002f;
+            LineRendererThree.endWidth = 0.002f;
+
+            // set the position
+            LineRendererThree.SetPosition(0, m_OneObject.transform.position);
+            LineRendererThree.SetPosition(1, m_ThreeObject.transform.position);
+        }
 
     void Update()
     {
         m_OneObject = m_ImageTrackingObjectManager.spawnedOnePrefab;
         m_TwoObject = m_ImageTrackingObjectManager.spawnedTwoPrefab;
-        m_ThreeObject = m_ImageTrackingObjectManager.spawnedTwoPrefab;
+        m_ThreeObject = m_ImageTrackingObjectManager.spawnedThreePrefab;
 
         if (m_ImageTrackingObjectManager.NumberOfTrackedImages() > 2)
         {
@@ -89,15 +107,16 @@ public class DistanceManager : MonoBehaviour
 
             if (true)
             {
-                if (!m_SumActive)
-                {
-                    m_SpawnedSumPrefab.SetActive(true);
-                    m_SumActive = true;
-                }
+                // if (!m_SumActive)
+                // {
+                //     m_SpawnedSumPrefab.SetActive(true);
+                //     m_SumActive = true;
+                // }
                 
-                m_SpawnedSumPrefab.transform.position = (m_OneObject.transform.position + m_TwoObject.transform.position) / 2;
-				Invoke("MakeLineOne", 0.0f);
+                // m_SpawnedSumPrefab.transform.position = (m_OneObject.transform.position + m_TwoObject.transform.position) / 2;
+				Invoke("MakeLineOne", 0.1f);
                 Invoke("MakeLineTwo", 0.1f);
+                Invoke("MakeLineThree", 0.1f);
             }
             else
             {
