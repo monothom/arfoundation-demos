@@ -79,19 +79,46 @@ public class ImageTrackingObjectManager : MonoBehaviour
         set => m_SpawnedTwoPrefab = value;
     }
 
+    [SerializeField]
+    [Tooltip("Prefab for tracked 1 image")]
+    GameObject m_ThreePrefab;
+
+    /// <summary>
+    /// Get the three prefab
+    /// </summary>
+    public GameObject threePrefab
+    {
+        get => m_ThreePrefab;
+        set => m_ThreePrefab = value;
+    }
+
+    GameObject m_SpawnedThreePrefab;
+
+    /// <summary>
+    /// get the spawned three prefab
+    /// </summary>
+    public GameObject spawnedThreePrefab
+    {
+        get => m_SpawnedThreePrefab;
+        set => m_SpawnedThreePrefab = value;
+    }
+
     int m_NumberOfTrackedImages;
     
     NumberManager m_OneNumberManager;
     NumberManager m_TwoNumberManager;
+    NumberManager m_ThreeNumberManager;
 
     static Guid s_FirstImageGUID;
     static Guid s_SecondImageGUID;
+    static Guid s_ThirdImageGUID;
 
     void OnEnable()
     {
         s_FirstImageGUID = m_ImageLibrary[0].guid;
         s_SecondImageGUID = m_ImageLibrary[1].guid;
-        
+        s_ThirdImageGUID = m_ImageLibrary[2].guid;
+
         m_ImageManager.trackedImagesChanged += ImageManagerOnTrackedImagesChanged;
     }
 
@@ -115,6 +142,11 @@ public class ImageTrackingObjectManager : MonoBehaviour
                 m_SpawnedTwoPrefab = Instantiate(m_TwoPrefab, image.transform.position, image.transform.rotation);
                 m_TwoNumberManager = m_SpawnedTwoPrefab.GetComponent<NumberManager>();
             }
+            else if (image.referenceImage.guid == s_ThirdImageGUID)
+            {
+                m_SpawnedThreePrefab = Instantiate(m_ThreePrefab, image.transform.position, image.transform.rotation);
+                m_ThreeNumberManager = m_SpawnedThreePrefab.GetComponent<NumberManager>();
+            }
         }
         
         // updated, set prefab position and rotation
@@ -133,6 +165,11 @@ public class ImageTrackingObjectManager : MonoBehaviour
                     m_TwoNumberManager.Enable3DNumber(true);
                     m_SpawnedTwoPrefab.transform.SetPositionAndRotation(image.transform.position, image.transform.rotation);
                 }
+                else if (image.referenceImage.guid == s_ThirdImageGUID)
+                {
+                    m_ThreeNumberManager.Enable3DNumber(true);
+                    m_SpawnedThreePrefab.transform.SetPositionAndRotation(image.transform.position, image.transform.rotation);
+                }
             }
             // image is no longer tracking, disable visuals TrackingState.Limited TrackingState.None
             else
@@ -145,6 +182,10 @@ public class ImageTrackingObjectManager : MonoBehaviour
                 {
                     m_TwoNumberManager.Enable3DNumber(false);
                 }
+                else if (image.referenceImage.guid == s_ThirdImageGUID)
+                {
+                    m_ThreeNumberManager.Enable3DNumber(false);
+                }
             }
         }
         
@@ -155,9 +196,13 @@ public class ImageTrackingObjectManager : MonoBehaviour
             {
                 Destroy(m_SpawnedOnePrefab);
             }
-            else if (image.referenceImage.guid == s_FirstImageGUID)
+            else if (image.referenceImage.guid == s_SecondImageGUID)
             {
                 Destroy(m_SpawnedTwoPrefab);
+            }
+            else if (image.referenceImage.guid == s_ThirdImageGUID)
+            {
+                Destroy(m_SpawnedThreePrefab);
             }
         }
     }

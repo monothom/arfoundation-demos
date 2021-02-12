@@ -5,8 +5,9 @@ public class DistanceManager : MonoBehaviour
     [SerializeField]
     [Tooltip("Image Tracking manager that detects tracked images")]
     ImageTrackingObjectManager m_ImageTrackingObjectManager;
-	public LineRenderer LineRenderer;
-    
+	public LineRenderer LineRendererOne;
+    public LineRenderer LineRendererTwo;
+
     /// <summary>
     /// Get the <c>ImageTrackingObjectManger</c>
     /// </summary>
@@ -32,6 +33,7 @@ public class DistanceManager : MonoBehaviour
     GameObject m_SpawnedSumPrefab;
     GameObject m_OneObject;
     GameObject m_TwoObject;
+    GameObject m_ThreeObject;
     float m_Distance;
     bool m_SumActive;
 
@@ -43,27 +45,45 @@ public class DistanceManager : MonoBehaviour
         m_SpawnedSumPrefab.SetActive(false);
     }
 	
-	 void MakeLine()
+	 void MakeLineOne()
     {
         // set the color of the line
-        LineRenderer.startColor = Color.red;
-        LineRenderer.endColor = Color.red;
- 
+        LineRendererOne.startColor = Color.red;
+        LineRendererOne.endColor = Color.red;
+        LineRendererOne.positionCount = 3;
+
         // set width of the renderer
-        LineRenderer.startWidth = 0.3f;
-        LineRenderer.endWidth = 0.3f;
- 
+        LineRendererOne.startWidth = 0.002f;
+        LineRendererOne.endWidth = 0.002f;
+
         // set the position
-        LineRenderer.SetPosition(0, m_OneObject.transform.position);
-        LineRenderer.SetPosition(1,  m_TwoObject.transform.position);
+        LineRendererOne.SetPosition(0, m_OneObject.transform.position);
+        LineRendererOne.SetPosition(1, m_TwoObject.transform.position);
+        LineRendererOne.SetPosition(2, m_ThreeObject.transform.position);
+    }
+
+    void MakeLineTwo()
+    {
+        // set the color of the line
+        LineRendererTwo.startColor = Color.blue;
+        LineRendererTwo.endColor = Color.blue;
+
+        // set width of the renderer
+        LineRendererTwo.startWidth = 0.002f;
+        LineRendererTwo.endWidth = 0.002f;
+
+        // set the position
+        LineRendererTwo.SetPosition(0, m_OneObject.transform.position);
+        LineRendererTwo.SetPosition(1, m_ThreeObject.transform.position);
     }
 
     void Update()
     {
         m_OneObject = m_ImageTrackingObjectManager.spawnedOnePrefab;
         m_TwoObject = m_ImageTrackingObjectManager.spawnedTwoPrefab;
+        m_ThreeObject = m_ImageTrackingObjectManager.spawnedTwoPrefab;
 
-        if (m_ImageTrackingObjectManager.NumberOfTrackedImages() > 1)
+        if (m_ImageTrackingObjectManager.NumberOfTrackedImages() > 2)
         {
             m_Distance = Vector3.Distance(m_OneObject.transform.position, m_TwoObject.transform.position);
 
@@ -76,8 +96,8 @@ public class DistanceManager : MonoBehaviour
                 }
                 
                 m_SpawnedSumPrefab.transform.position = (m_OneObject.transform.position + m_TwoObject.transform.position) / 2;
-				Invoke("MakeLine", 0.1f);
-
+				Invoke("MakeLineOne", 0.0f);
+                Invoke("MakeLineTwo", 0.1f);
             }
             else
             {
@@ -85,6 +105,27 @@ public class DistanceManager : MonoBehaviour
                 m_SumActive = false;
             }
         }
+        //else if (m_ImageTrackingObjectManager.NumberOfTrackedImages() < 2)
+        //{
+        //    if (true)
+        //    {
+        //        if (!m_SumActive)
+        //        {
+        //            m_SpawnedSumPrefab.SetActive(true);
+        //            m_SumActive = true;
+        //        }
+
+        //        m_SpawnedSumPrefab.transform.position = (m_OneObject.transform.position + m_TwoObject.transform.position) / 2;
+        //        Invoke("MakeLineOne", 0.0f);
+        //        Invoke("MakeLineTwo", 0.0f);
+
+        //    }
+        //    else
+        //    {
+        //        m_SpawnedSumPrefab.SetActive(false);
+        //        m_SumActive = false;
+        //    }
+        //}
         else
         {
             m_SpawnedSumPrefab.SetActive(false);
